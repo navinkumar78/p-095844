@@ -1,3 +1,4 @@
+
 import { Link } from "react-router-dom";
 
 export const Hero = () => {
@@ -17,7 +18,7 @@ export const Hero = () => {
             to="/report"
             className="self-stretch border border-[color:var(--Colors-Indigo,#5856D6)] bg-[#5856D6] gap-2 text-white px-6 py-3 border-solid hover:bg-[#4745c0] transition-colors max-md:px-5"
           >
-            Report
+            Report an Item
           </Link>
           <Link
             to="/browse"
