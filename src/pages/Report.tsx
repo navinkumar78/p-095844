@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery, useMutation } from "@tanstack/react-query";
@@ -134,6 +133,18 @@ export default function Report() {
     }
     submitMutation.mutate();
   };
+
+  // Check authentication
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        toast.error("Please sign in to report an item");
+        navigate("/auth");
+      }
+    };
+    checkAuth();
+  }, [navigate]);
 
   return (
     <div className="container max-w-4xl py-8 space-y-8 animate-fade-in">

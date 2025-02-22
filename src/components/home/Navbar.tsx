@@ -1,6 +1,40 @@
-import { Link } from "react-router-dom";
+
+import { Link, useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export const Navbar = () => {
+  const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    // Get initial session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+    });
+
+    // Listen for auth changes
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const handleSignOut = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      toast.error("Error signing out");
+    } else {
+      toast.success("Signed out successfully");
+      navigate("/");
+    }
+  };
+
   return (
     <nav className="bg-white min-h-[72px] w-full flex flex-col items-stretch justify-center px-16 max-md:max-w-full max-md:px-5">
       <div className="flex w-full items-center gap-[40px_100px] justify-between flex-wrap max-md:max-w-full">
@@ -25,12 +59,22 @@ export const Navbar = () => {
             </Link>
           </div>
           <div className="self-stretch flex items-center gap-4 text-white justify-center my-auto">
-            <Link
-              to="/signup"
-              className="self-stretch bg-black border gap-2 my-auto px-5 py-2 border-black border-solid hover:bg-gray-800 transition-colors"
-            >
-              Sign Up
-            </Link>
+            {user ? (
+              <Button
+                variant="outline"
+                onClick={handleSignOut}
+                className="text-black hover:text-gray-600 transition-colors"
+              >
+                Sign Out
+              </Button>
+            ) : (
+              <Link
+                to="/auth"
+                className="self-stretch bg-black border gap-2 my-auto px-5 py-2 border-black border-solid hover:bg-gray-800 transition-colors"
+              >
+                Sign In
+              </Link>
+            )}
           </div>
         </div>
       </div>

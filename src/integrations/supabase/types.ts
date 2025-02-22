@@ -9,7 +9,77 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      item_categories: {
+        Row: {
+          created_at: string
+          icon: string
+          id: number
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          icon: string
+          id?: number
+          name: string
+        }
+        Update: {
+          created_at?: string
+          icon?: string
+          id?: number
+          name?: string
+        }
+        Relationships: []
+      }
+      reported_items: {
+        Row: {
+          category_id: number
+          created_at: string
+          date_time: string
+          description: string | null
+          id: string
+          images: string[] | null
+          location_details: string
+          location_type: Database["public"]["Enums"]["location_type"]
+          status: Database["public"]["Enums"]["item_status"]
+          title: string
+          user_id: string | null
+        }
+        Insert: {
+          category_id: number
+          created_at?: string
+          date_time: string
+          description?: string | null
+          id?: string
+          images?: string[] | null
+          location_details: string
+          location_type: Database["public"]["Enums"]["location_type"]
+          status: Database["public"]["Enums"]["item_status"]
+          title: string
+          user_id?: string | null
+        }
+        Update: {
+          category_id?: number
+          created_at?: string
+          date_time?: string
+          description?: string | null
+          id?: string
+          images?: string[] | null
+          location_details?: string
+          location_type?: Database["public"]["Enums"]["location_type"]
+          status?: Database["public"]["Enums"]["item_status"]
+          title?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reported_items_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "item_categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -18,7 +88,8 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      item_status: "lost" | "found"
+      location_type: "address" | "transport" | "airport" | "town_hall_police"
     }
     CompositeTypes: {
       [_ in never]: never
