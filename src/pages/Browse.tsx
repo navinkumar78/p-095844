@@ -1,8 +1,10 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
-import { MapPin, Calendar, Image as ImageIcon } from "lucide-react";
+import { MapPin, Calendar, Image as ImageIcon, ArrowLeft } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -20,6 +22,7 @@ type ReportedItem = Database["public"]["Tables"]["reported_items"]["Row"] & {
 };
 
 export default function Browse() {
+  const navigate = useNavigate();
   const { data: items, isLoading } = useQuery({
     queryKey: ["reported-items"],
     queryFn: async () => {
@@ -42,6 +45,14 @@ export default function Browse() {
   if (isLoading) {
     return (
       <div className="container py-8 animate-fade-in">
+        <Button
+          variant="ghost"
+          className="mb-4"
+          onClick={() => navigate(-1)}
+        >
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          Back
+        </Button>
         <h1 className="text-4xl font-bold mb-8">Browse Items</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[1, 2, 3, 4, 5, 6].map((i) => (
@@ -60,6 +71,14 @@ export default function Browse() {
 
   return (
     <div className="container py-8 animate-fade-in">
+      <Button
+        variant="ghost"
+        className="mb-4"
+        onClick={() => navigate(-1)}
+      >
+        <ArrowLeft className="h-4 w-4 mr-2" />
+        Back
+      </Button>
       <h1 className="text-4xl font-bold mb-8">Browse Items</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {items?.map((item) => (
