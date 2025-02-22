@@ -14,12 +14,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import type { Database } from "@/integrations/supabase/types";
 
-interface Profile {
-  id: string;
-  email: string;
-  avatar_url: string | null;
-}
+type Profile = Database["public"]["Tables"]["profiles"]["Row"];
 
 export const Navbar = () => {
   const navigate = useNavigate();
@@ -91,6 +88,12 @@ export const Navbar = () => {
         </Link>
         <div className="self-stretch flex items-center gap-8 text-base font-normal justify-center my-auto">
           <div className="self-stretch flex items-center gap-8 text-black my-auto">
+            <Link
+              to="/browse"
+              className="self-stretch gap-1 my-auto hover:text-gray-600 transition-colors"
+            >
+              Browse Items
+            </Link>
             <Link
               to="/contact"
               className="self-stretch gap-1 my-auto hover:text-gray-600 transition-colors"
